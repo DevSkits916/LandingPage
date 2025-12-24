@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#070a10" />
+  <meta name="description" content="DevSkits landing page: contact info, socials, and payment links." />
+  <title>DevSkits | Links & Contact</title>
+  <style>
+    
+    :root{
+      --bg: #070a10;        /* near-black */
+      --bg2:#0b0f18;        /* deep slate */
+      --card:#0c111bcc;     /* charcoal glass */
+      --card2:#0a0f18ee;    /* deeper panel */
+      --text:#e6edf7;       /* cool white */
+      --muted:#9aa7bd;      /* steel gray */
+      --line:#1a2436;       /* divider */
+      --accent:#3b82f6;     /* steel blue */
+      --accent2:#f97316;    /* ember orange */
+      --shadow: 0 18px 45px rgba(0,0,0,.62);
+      --radius: 18px;
+      --radius2: 14px;
+      --max: 980px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+*{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      background:
+        radial-gradient(900px 550px at 15% 8%, rgba(59,130,246,.18), transparent 62%),
+        radial-gradient(850px 520px at 88% 28%, rgba(249,115,22,.12), transparent 60%),
+        radial-gradient(700px 420px at 45% 95%, rgba(255,255,255,.05), transparent 55%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      color:var(--text);
+      line-height:1.5;
+    }
+
+    a{color:inherit}
+    .wrap{max-width:var(--max); margin:0 auto; padding:28px 18px 44px}
+    .top{
+      display:flex; gap:18px; align-items:center; justify-content:space-between; flex-wrap:wrap;
+      padding:10px 2px 18px;
+    }
+    .brand{
+      display:flex; gap:14px; align-items:center;
+    }
+    .logo{
+      width:48px; height:48px; border-radius:14px;
+      background: linear-gradient(135deg, rgba(59,130,246,.95), rgba(17,24,39,.95));
+      box-shadow: var(--shadow);
+      display:grid; place-items:center;
+      border:1px solid rgba(255,255,255,.18);
+    }
+    .logo span{
+      font-weight:900;
+      letter-spacing:.5px;
+      font-size:18px;
+      color:white;
+      text-shadow: 0 6px 20px rgba(0,0,0,.35);
+      user-select:none;
+    }
+    .title{
+      display:flex; flex-direction:column;
+    }
+    .title h1{
+      font-size:20px; margin:0; letter-spacing:.2px;
+    }
+    .title p{
+      margin:2px 0 0; color:var(--muted); font-size:13px;
+    }
+
+    .ctaRow{display:flex; gap:10px; flex-wrap:wrap}
+    .btn{
+      appearance:none; border:1px solid rgba(255,255,255,.16);
+      background:
+        radial-gradient(900px 550px at 15% 8%, rgba(59,130,246,.18), transparent 62%),
+        radial-gradient(850px 520px at 88% 28%, rgba(249,115,22,.12), transparent 60%),
+        radial-gradient(700px 420px at 45% 95%, rgba(255,255,255,.05), transparent 55%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:999px;
+      font-weight:650;
+      font-size:13px;
+      text-decoration:none;
+      display:inline-flex; gap:8px; align-items:center;
+      box-shadow: 0 10px 22px rgba(0,0,0,.12);
+      transition: transform .08s ease, border-color .08s ease, background .08s ease;
+      backdrop-filter: blur(8px);
+    }
+    .btn:hover{transform: translateY(-1px); border-color: rgba(59,130,246,.60)}
+    .btn:active{transform: translateY(0)}
+    .btn.primary{
+      border-color: rgba(59,130,246,.60);
+      background: linear-gradient(135deg, rgba(59,130,246,.95), rgba(249,115,22,.55));
+      color:white;
+    }
+    .btn.ghost{
+      background: transparent;
+      box-shadow:none;
+      border-color: rgba(255,255,255,.16);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:16px;
+      margin-top:10px;
+    }
+    @media (max-width: 880px){
+      .grid{grid-template-columns: 1fr}
+    }
+
+    .card{
+      background: linear-gradient(180deg, var(--card), var(--card2));
+      border:1px solid rgba(255,255,255,.12);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .cardHeader{
+      padding:16px 16px 12px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    .cardHeader h2{
+      margin:0;
+      font-size:14px;
+      letter-spacing:.35px;
+      text-transform:uppercase;
+      color:var(--muted);
+    }
+    .pill{
+      font-family:var(--mono);
+      font-size:12px;
+      color:var(--muted);
+      border:1px solid rgba(255,255,255,.14);
+      padding:6px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.035);
+      user-select:none;
+    }
+
+    .cardBody{padding:14px 16px 16px}
+    .row{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      padding:10px 0;
+      border-top:1px solid rgba(255,255,255,.10);
+    }
+    .row:first-child{border-top:0; padding-top:0}
+    .left{
+      display:flex; gap:10px; align-items:center; min-width:0;
+    }
+    .icon{
+      width:36px; height:36px; border-radius:12px;
+      display:grid; place-items:center;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.04);
+      flex:0 0 auto;
+    }
+    .labelWrap{min-width:0}
+    .label{
+      font-weight:750;
+      font-size:14px;
+      margin:0;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .value{
+      margin:2px 0 0;
+      color:var(--muted);
+      font-family:var(--mono);
+      font-size:12.5px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+
+    .actions{display:flex; gap:8px; flex:0 0 auto}
+    .smallBtn{
+      appearance:none;
+      border:1px solid rgba(255,255,255,.16);
+      background:
+        radial-gradient(900px 550px at 15% 8%, rgba(59,130,246,.18), transparent 62%),
+        radial-gradient(850px 520px at 88% 28%, rgba(249,115,22,.12), transparent 60%),
+        radial-gradient(700px 420px at 45% 95%, rgba(255,255,255,.05), transparent 55%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      color:var(--text);
+      padding:8px 10px;
+      border-radius:12px;
+      font-weight:700;
+      font-size:12.5px;
+      text-decoration:none;
+      cursor:pointer;
+      transition: transform .08s ease, border-color .08s ease;
+    }
+    .smallBtn:hover{transform: translateY(-1px); border-color: rgba(249,115,22,.55)}
+    .smallBtn:active{transform: translateY(0)}
+    .smallBtn.copy:hover{border-color: rgba(59,130,246,.70)}
+    .smallBtn.warn:hover{border-color: rgba(245,158,11,.7)}
+    .note{
+      margin-top:12px;
+      color:var(--muted);
+      font-size:12.5px;
+    }
+
+    .linksGrid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+    }
+    .linkCard{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      border-radius: var(--radius2);
+      padding:12px 12px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      text-decoration:none;
+      transition: transform .08s ease, border-color .08s ease;
+    }
+    .linkCard:hover{transform: translateY(-1px); border-color: rgba(59,130,246,.60)}
+    .linkCard:active{transform: translateY(0)}
+    .linkMeta{
+      display:flex; gap:10px; align-items:center; min-width:0;
+    }
+    .linkMeta .name{
+      font-weight:800;
+      font-size:14px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .linkMeta .sub{
+      font-size:12.5px;
+      color:var(--muted);
+      font-family:var(--mono);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .arrow{
+      opacity:.8;
+      font-size:18px;
+      flex:0 0 auto;
+    }
+
+    footer{
+      margin-top:18px;
+      padding:14px 4px 0;
+      color:var(--muted);
+      font-size:12px;
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+    }
+
+    .toast{
+      position:fixed;
+      left:50%;
+      bottom:18px;
+      transform: translateX(-50%);
+      background: rgba(17,24,39,.92);
+      color:#fff;
+      border:1px solid rgba(255,255,255,.14);
+      padding:10px 12px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      font-size:12.5px;
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .18s ease, transform .18s ease;
+      backdrop-filter: blur(12px);
+    }
+    .toast.show{
+      opacity:1;
+      transform: translateX(-50%) translateY(-2px);
+    }
+
+    svg{display:block}
+    .i{width:18px; height:18px; opacity:.9}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="top">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"><span>DS</span></div>
+        <div class="title">
+          <h1>DevSkits</h1>
+          <p>Contact info, socials, and payment handles in one place.</p>
+        </div>
+      </div>
+
+      <div class="ctaRow">
+        <a class="btn primary" href="mailto:DevSkits@icloud.com" title="Email DevSkits">
+          <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2" /><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="2"/></svg>
+          Email
+        </a>
+        <a class="btn" href="tel:+19164203052" title="Call">
+          <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M6.5 3.5 9.5 6.5c.6.6.6 1.5 0 2.1L8.4 9.7c1.2 2.2 3 4.1 5.3 5.3l1.1-1.1c.6-.6 1.5-.6 2.1 0l3 3c.6.6.6 1.5 0 2.1-1.1 1.1-2.8 1.6-4.3 1.2-6.1-1.6-10.8-6.3-12.4-12.4-.4-1.5.1-3.2 1.2-4.3.6-.6 1.5-.6 2.1 0Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          Call
+        </a>
+        <button class="btn ghost" id="copyAllBtn" type="button" title="Copy a plain-text bundle of everything">
+          <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M9 9h10v10H9V9Z" stroke="currentColor" stroke-width="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1" stroke="currentColor" stroke-width="2"/></svg>
+          Copy all
+        </button>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="card" aria-label="Contact information">
+        <div class="cardHeader">
+          <h2>Contact</h2>
+          <span class="pill">fast, boring, useful</span>
+        </div>
+        <div class="cardBody">
+
+          <div class="row">
+            <div class="left">
+              <div class="icon" aria-hidden="true">
+                <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2" /><path d="m4 7 8 6 8-6" stroke="currentColor" stroke-width="2"/></svg>
+              </div>
+              <div class="labelWrap">
+                <p class="label">Primary email</p>
+                <p class="value" data-copy="DevSkits@icloud.com">DevSkits@icloud.com</p>
+              </div>
+            </div>
+            <div class="actions">
+              <a class="smallBtn" href="mailto:DevSkits@icloud.com">Open</a>
+              <button class="smallBtn copy" type="button" data-copy-btn="DevSkits@icloud.com">Copy</button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="left">
+              <div class="icon" aria-hidden="true">
+                <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M6.5 3.5 9.5 6.5c.6.6.6 1.5 0 2.1L8.4 9.7c1.2 2.2 3 4.1 5.3 5.3l1.1-1.1c.6-.6 1.5-.6 2.1 0l3 3c.6.6.6 1.5 0 2.1-1.1 1.1-2.8 1.6-4.3 1.2-6.1-1.6-10.8-6.3-12.4-12.4-.4-1.5.1-3.2 1.2-4.3.6-.6.6-1.5 0-2.1Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="labelWrap">
+                <p class="label">Phone</p>
+                <p class="value" data-copy="916-420-3052">916-420-3052</p>
+              </div>
+            </div>
+            <div class="actions">
+              <a class="smallBtn" href="tel:+19164203052">Open</a>
+              <button class="smallBtn copy" type="button" data-copy-btn="916-420-3052">Copy</button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="left">
+              <div class="icon" aria-hidden="true">
+                <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M8 7h8M8 11h8M8 15h5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M6 3h12a2 2 0 0 1 2 2v14l-4-2-4 2-4-2-4 2V5a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="labelWrap">
+                <p class="label">Secondary email</p>
+                <p class="value" data-copy="Urbankayaker007@icloud.com">Urbankayaker007@icloud.com</p>
+              </div>
+            </div>
+            <div class="actions">
+              <a class="smallBtn" href="mailto:Urbankayaker007@icloud.com">Open</a>
+              <button class="smallBtn copy" type="button" data-copy-btn="Urbankayaker007@icloud.com">Copy</button>
+            </div>
+          </div>
+
+          <p class="note">Payments are listed below. Humans still can’t standardize anything.</p>
+        </div>
+      </section>
+
+      <section class="card" aria-label="Payment platforms">
+        <div class="cardHeader">
+          <h2>Payment platforms</h2>
+          <span class="pill">copyable handles</span>
+        </div>
+        <div class="cardBody">
+
+          <div class="row">
+            <div class="left">
+              <div class="icon" aria-hidden="true">
+                <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M6 7.5c2.5-2.5 9.5-2.5 12 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M6 16.5c2.5 2.5 9.5 2.5 12 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10 8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M14 8.5c1.7 0 3 1 3 2.2S15.7 13 14 13h-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 13h2c1.9 0 3.5 1.1 3.5 2.5S15.9 18 14 18h-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="labelWrap">
+                <p class="label">Venmo</p>
+                <p class="value" data-copy="@DevSkits">@DevSkits</p>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="smallBtn copy" type="button" data-copy-btn="@DevSkits">Copy</button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="left">
+              <div class="icon" aria-hidden="true">
+                <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M7 7h10M7 12h10M7 17h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2"/></svg>
+              </div>
+              <div class="labelWrap">
+                <p class="label">Cash App</p>
+                <p class="value" data-copy="$DevSkits916">$DevSkits916</p>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="smallBtn copy" type="button" data-copy-btn="$DevSkits916">Copy</button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="left">
+              <div class="icon" aria-hidden="true">
+                <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M12 3v18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M7 7c0-2.2 2.2-4 5-4s5 1.8 5 4-2.2 4-5 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M17 17c0 2.2-2.2 4-5 4s-5-1.8-5-4 2.2-4 5-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="labelWrap">
+                <p class="label">Chime</p>
+                <p class="value" data-copy="$DevSkits916">$DevSkits916</p>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="smallBtn copy" type="button" data-copy-btn="$DevSkits916">Copy</button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="left">
+              <div class="icon" aria-hidden="true">
+                <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z" stroke="currentColor" stroke-width="2"/><path d="M9 12h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10.2 9.2A3.4 3.4 0 0 1 12 8.7c2.2 0 3.7 1.3 3.7 3.3S14.2 15.3 12 15.3c-1.1 0-2-.2-2.8-.7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="labelWrap">
+                <p class="label">PayPal</p>
+                <p class="value" data-copy="@DevSkits916">@DevSkits916</p>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="smallBtn copy" type="button" data-copy-btn="@DevSkits916">Copy</button>
+            </div>
+          </div>
+
+          <p class="note">Copy buttons exist because typing handles is how mistakes are born.</p>
+        </div>
+      </section>
+
+      <section class="card" aria-label="Social platforms and links" style="grid-column: 1 / -1;">
+        <div class="cardHeader">
+          <h2>Social platforms</h2>
+          <span class="pill">tap to open</span>
+        </div>
+        <div class="cardBody">
+          <div class="linksGrid">
+
+            <a class="linkCard" href="https://gofund.me/6bbc0274e" target="_blank" rel="noopener">
+              <div class="linkMeta">
+                <div class="icon" aria-hidden="true">
+                  <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 11c0 5.6-7 10-7 10Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+                </div>
+                <div style="min-width:0">
+                  <div class="name">GoFundMe</div>
+                  <div class="sub">gofund.me/6bbc0274e</div>
+                </div>
+              </div>
+              <div class="actions">
+                <button class="smallBtn copy" type="button" data-copy-btn="https://gofund.me/6bbc0274e">Copy</button>
+                <span class="arrow">↗</span>
+              </div>
+            </a>
+
+            <a class="linkCard" href="https://github.com/DevSkits916" target="_blank" rel="noopener">
+              <div class="linkMeta">
+                <div class="icon" aria-hidden="true">
+                  <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M9 19c-4 1-4-2-6-2m12 4v-3.5c0-1 .1-1.5-.5-2.2 2.3-.3 4.7-1.1 4.7-5A3.9 3.9 0 0 0 18.2 7c.1-.4.5-1.9-.1-3.1 0 0-1-.3-3.2 1.2a10.9 10.9 0 0 0-5.8 0C6.9 3.6 5.9 3.9 5.9 3.9c-.6 1.2-.2 2.7-.1 3.1A3.9 3.9 0 0 0 4.7 10.2c0 3.9 2.4 4.7 4.7 5-.4.4-.5.9-.5 1.7V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div style="min-width:0">
+                  <div class="name">GitHub</div>
+                  <div class="sub">github.com/DevSkits916</div>
+                </div>
+              </div>
+              <div class="actions">
+                <button class="smallBtn copy" type="button" data-copy-btn="https://github.com/DevSkits916">Copy</button>
+                <span class="arrow">↗</span>
+              </div>
+            </a>
+
+            <a class="linkCard" href="https://www.facebook.com/DevSkits?mibextid=wwXIfr" target="_blank" rel="noopener">
+              <div class="linkMeta">
+                <div class="icon" aria-hidden="true">
+                  <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M14 8h2V5h-2c-2.2 0-4 1.8-4 4v2H8v3h2v7h3v-7h2.2l.8-3H13V9c0-.6.4-1 1-1Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+                </div>
+                <div style="min-width:0">
+                  <div class="name">Facebook</div>
+                  <div class="sub">facebook.com/DevSkits</div>
+                </div>
+              </div>
+              <div class="actions">
+                <button class="smallBtn copy" type="button" data-copy-btn="https://www.facebook.com/DevSkits?mibextid=wwXIfr">Copy</button>
+                <span class="arrow">↗</span>
+              </div>
+            </a>
+
+            <a class="linkCard" href="https://x.com/devskits916?s=21" target="_blank" rel="noopener">
+              <div class="linkMeta">
+                <div class="icon" aria-hidden="true">
+                  <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M7 6h4l6 12h-4L7 6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+                </div>
+                <div style="min-width:0">
+                  <div class="name">X (Twitter)</div>
+                  <div class="sub">@Devskits916</div>
+                </div>
+              </div>
+              <div class="actions">
+                <button class="smallBtn copy" type="button" data-copy-btn="@Devskits916">Copy</button>
+                <span class="arrow">↗</span>
+              </div>
+            </a>
+
+            <a class="linkCard" href="https://www.reddit.com/u/DevSkits/s/RE9W0sZoV1" target="_blank" rel="noopener">
+              <div class="linkMeta">
+                <div class="icon" aria-hidden="true">
+                  <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M20 12c0 4-3.6 7-8 7s-8-3-8-7 3.6-7 8-7 8 3 8 7Z" stroke="currentColor" stroke-width="2"/><path d="M8.5 13.5c.8 1.1 2.1 1.8 3.5 1.8s2.7-.7 3.5-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9 11h.01M15 11h.01" stroke="currentColor" stroke-width="3" stroke-linecap="round"/></svg>
+                </div>
+                <div style="min-width:0">
+                  <div class="name">Reddit</div>
+                  <div class="sub">reddit.com/u/DevSkits</div>
+                </div>
+              </div>
+              <div class="actions">
+                <button class="smallBtn copy" type="button" data-copy-btn="https://www.reddit.com/u/DevSkits/s/RE9W0sZoV1">Copy</button>
+                <span class="arrow">↗</span>
+              </div>
+            </a>
+
+          </div>
+
+          <footer>
+            <span>© <span id="year"></span> DevSkits</span>
+            <span>Pure HTML/CSS/JS. No external assets. No analytics. The bar is low.</span>
+          </footer>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">Copied.</div>
+
+  <script>
+    const toast = document.getElementById('toast');
+    const showToast = (msg) => {
+      toast.textContent = msg || 'Copied.';
+      toast.classList.add('show');
+      clearTimeout(window.__toastTimer);
+      window.__toastTimer = setTimeout(() => toast.classList.remove('show'), 1400);
+    };
+
+    async function copyText(text){
+      try{
+        await navigator.clipboard.writeText(text);
+        showToast('Copied: ' + text);
+      }catch(e){
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        try { document.execCommand('copy'); showToast('Copied: ' + text); }
+        catch(err){ showToast('Copy failed. Your browser is being dramatic.'); }
+        document.body.removeChild(ta);
+      }
+    }
+
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-copy-btn]');
+      if(btn){
+        e.preventDefault();
+        copyText(btn.getAttribute('data-copy-btn'));
+      }
+    });
+
+    document.getElementById('copyAllBtn').addEventListener('click', () => {
+      const bundle = [
+        'DevSkits',
+        '',
+        'Contact:',
+        'Email: DevSkits@icloud.com',
+        'Alt email: Urbankayaker007@icloud.com',
+        'Phone: 916-420-3052',
+        '',
+        'Payments:',
+        'Venmo: @DevSkits',
+        'Cash App: $DevSkits916',
+        'Chime: $DevSkits916',
+        'PayPal: @DevSkits916',
+        '',
+        'Links:',
+        'GoFundMe: https://gofund.me/6bbc0274e',
+        'GitHub: https://github.com/DevSkits916',
+        'Facebook: https://www.facebook.com/DevSkits?mibextid=wwXIfr',
+        'X: https://x.com/devskits916?s=21',
+        'Reddit: https://www.reddit.com/u/DevSkits/s/RE9W0sZoV1'
+      ].join('\n');
+      copyText(bundle);
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
