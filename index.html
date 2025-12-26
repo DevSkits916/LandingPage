@@ -122,6 +122,12 @@
       box-shadow: var(--shadow);
       overflow:hidden;
     }
+    .card.highlight{
+      background: radial-gradient(120% 120% at 0% 20%, rgba(34,197,94,.16), rgba(12,17,27,.6)),
+                  radial-gradient(120% 140% at 100% 0%, rgba(74,222,128,.2), rgba(12,17,27,.7)),
+                  linear-gradient(180deg, #0b1410, #0b120f);
+      border-color: rgba(74,222,128,.35);
+    }
     .cardHeader{
       padding:16px 16px 12px;
       border-bottom:1px solid rgba(255,255,255,.10);
@@ -346,74 +352,27 @@
         </div>
       </section>
 
-      <section class="card" aria-label="Payment platforms">
+      <section class="card highlight" aria-label="GoFundMe" style="grid-column: 1 / -1;">
         <div class="cardHeader">
-          <h2>Payment platforms</h2>
-          <span class="pill">copyable handles</span>
+          <h2>GoFundMe</h2>
+          <span class="pill">support directly</span>
         </div>
         <div class="cardBody">
-
-          <div class="row">
-            <div class="left">
-              <div class="icon" aria-hidden="true">
-                <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M6 7.5c2.5-2.5 9.5-2.5 12 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M6 16.5c2.5 2.5 9.5 2.5 12 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10 8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M14 8.5c1.7 0 3 1 3 2.2S15.7 13 14 13h-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 13h2c1.9 0 3.5 1.1 3.5 2.5S15.9 18 14 18h-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <a class="linkCard" href="https://gofund.me/6bbc0274e" target="_blank" rel="noopener" style="border-color: rgba(74,222,128,.45); background: rgba(34,197,94,.1);">
+            <div class="linkMeta">
+              <div class="icon" aria-hidden="true" style="border-color: rgba(74,222,128,.6); background: rgba(34,197,94,.18);">
+                <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 11c0 5.6-7 10-7 10Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
               </div>
-              <div class="labelWrap">
-                <p class="label">Venmo</p>
-                <p class="value" data-copy="@DevSkits">@DevSkits</p>
-              </div>
-            </div>
-            <div class="actions">
-              <button class="smallBtn copy" type="button" data-copy-btn="@DevSkits">Copy</button>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="left">
-              <div class="icon" aria-hidden="true">
-                <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M7 7h10M7 12h10M7 17h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2"/></svg>
-              </div>
-              <div class="labelWrap">
-                <p class="label">Cash App</p>
-                <p class="value" data-copy="$DevSkits916">$DevSkits916</p>
+              <div style="min-width:0">
+                <div class="name">GoFundMe</div>
+                <div class="sub">gofund.me/6bbc0274e</div>
               </div>
             </div>
             <div class="actions">
-              <button class="smallBtn copy" type="button" data-copy-btn="$DevSkits916">Copy</button>
+              <button class="smallBtn copy" type="button" data-copy-btn="https://gofund.me/6bbc0274e">Copy</button>
+              <span class="arrow">↗</span>
             </div>
-          </div>
-
-          <div class="row">
-            <div class="left">
-              <div class="icon" aria-hidden="true">
-                <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M12 3v18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M7 7c0-2.2 2.2-4 5-4s5 1.8 5 4-2.2 4-5 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M17 17c0 2.2-2.2 4-5 4s-5-1.8-5-4 2.2-4 5-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              </div>
-              <div class="labelWrap">
-                <p class="label">Chime</p>
-                <p class="value" data-copy="$DevSkits916">$DevSkits916</p>
-              </div>
-            </div>
-            <div class="actions">
-              <button class="smallBtn copy" type="button" data-copy-btn="$DevSkits916">Copy</button>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="left">
-              <div class="icon" aria-hidden="true">
-                <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z" stroke="currentColor" stroke-width="2"/><path d="M9 12h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10.2 9.2A3.4 3.4 0 0 1 12 8.7c2.2 0 3.7 1.3 3.7 3.3S14.2 15.3 12 15.3c-1.1 0-2-.2-2.8-.7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-              </div>
-              <div class="labelWrap">
-                <p class="label">PayPal</p>
-                <p class="value" data-copy="@DevSkits916">@DevSkits916</p>
-              </div>
-            </div>
-            <div class="actions">
-              <button class="smallBtn copy" type="button" data-copy-btn="@DevSkits916">Copy</button>
-            </div>
-          </div>
-
-          <p class="note">Copy buttons exist because typing handles is how mistakes are born.</p>
+          </a>
         </div>
       </section>
 
@@ -424,22 +383,6 @@
         </div>
         <div class="cardBody">
           <div class="linksGrid">
-
-            <a class="linkCard" href="https://gofund.me/6bbc0274e" target="_blank" rel="noopener">
-              <div class="linkMeta">
-                <div class="icon" aria-hidden="true">
-                  <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2.4A4 4 0 0 1 19 11c0 5.6-7 10-7 10Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-                </div>
-                <div style="min-width:0">
-                  <div class="name">GoFundMe</div>
-                  <div class="sub">gofund.me/6bbc0274e</div>
-                </div>
-              </div>
-              <div class="actions">
-                <button class="smallBtn copy" type="button" data-copy-btn="https://gofund.me/6bbc0274e">Copy</button>
-                <span class="arrow">↗</span>
-              </div>
-            </a>
 
             <a class="linkCard" href="https://github.com/DevSkits916" target="_blank" rel="noopener">
               <div class="linkMeta">
@@ -511,6 +454,77 @@
             <span>© <span id="year"></span> Travis Ramsey</span>
             <span>Pure HTML/CSS/JS. No external assets. No analytics. The bar is low.</span>
           </footer>
+        </div>
+      </section>
+
+      <section class="card" aria-label="Payment platforms" style="grid-column: 1 / -1;">
+        <div class="cardHeader">
+          <h2>Payment platforms</h2>
+          <span class="pill">copyable handles</span>
+        </div>
+        <div class="cardBody">
+
+          <div class="row">
+            <div class="left">
+              <div class="icon" aria-hidden="true">
+                <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M6 7.5c2.5-2.5 9.5-2.5 12 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M6 16.5c2.5 2.5 9.5 2.5 12 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10 8v8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M14 8.5c1.7 0 3 1 3 2.2S15.7 13 14 13h-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 13h2c1.9 0 3.5 1.1 3.5 2.5S15.9 18 14 18h-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="labelWrap">
+                <p class="label">Venmo</p>
+                <p class="value" data-copy="@DevSkits">@DevSkits</p>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="smallBtn copy" type="button" data-copy-btn="@DevSkits">Copy</button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="left">
+              <div class="icon" aria-hidden="true">
+                <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M7 7h10M7 12h10M7 17h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2"/></svg>
+              </div>
+              <div class="labelWrap">
+                <p class="label">Cash App</p>
+                <p class="value" data-copy="$DevSkits916">$DevSkits916</p>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="smallBtn copy" type="button" data-copy-btn="$DevSkits916">Copy</button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="left">
+              <div class="icon" aria-hidden="true">
+                <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M12 3v18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M7 7c0-2.2 2.2-4 5-4s5 1.8 5 4-2.2 4-5 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M17 17c0 2.2-2.2 4-5 4s-5-1.8-5-4 2.2-4 5-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="labelWrap">
+                <p class="label">Chime</p>
+                <p class="value" data-copy="$DevSkits916">$DevSkits916</p>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="smallBtn copy" type="button" data-copy-btn="$DevSkits916">Copy</button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="left">
+              <div class="icon" aria-hidden="true">
+                <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18Z" stroke="currentColor" stroke-width="2"/><path d="M9 12h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10.2 9.2A3.4 3.4 0 0 1 12 8.7c2.2 0 3.7 1.3 3.7 3.3S14.2 15.3 12 15.3c-1.1 0-2-.2-2.8-.7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+              </div>
+              <div class="labelWrap">
+                <p class="label">PayPal</p>
+                <p class="value" data-copy="@DevSkits916">@DevSkits916</p>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="smallBtn copy" type="button" data-copy-btn="@DevSkits916">Copy</button>
+            </div>
+          </div>
+
+          <p class="note">Copy buttons exist because typing handles is how mistakes are born.</p>
         </div>
       </section>
     </main>
