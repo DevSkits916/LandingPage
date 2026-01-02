@@ -13,3 +13,5 @@ Open `index.html` in your browser or serve the folder with any static server (fo
 3. Save. GitHub Pages will publish the site at `https://<your-username>.github.io/<repo-name>/`.
 
 No build steps, external assets, or dependencies are required.
+
+See builder for html structure for your own 
