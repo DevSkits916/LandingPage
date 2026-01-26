@@ -1,5 +1,6 @@
 https://devskits916.github.io/LandingPage/
-
+& because Github pages doesn't always work
+https://resplendent-yeot-767b00.netlify.app/
 # DevSkits Landing Page
 
 This repository hosts a single-page contact and links hub for DevSkits that is ready to serve from GitHub Pages.
