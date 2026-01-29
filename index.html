@@ -920,7 +920,7 @@
 
     const vcardPhotoBase64 = '/9j/4AAQSkZJRgABAQAASABIAAD/4QBMRXhpZgAATU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAGAKADAAQAAAABAAAIAAAAAAD/wAARCAgABgADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9sAQwACAgICAgIDAgIDBQMDAwUGBQUFBQYIBgYGBgYICggICAgICAoKCgoKCgoKDAwMDAwMDg4ODg4PDw8PDw8PDw8P/9sAQwECAgIEBAQHBAQHEAsJCxAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQ/90ABABg/9oADAMBAAIRAxEAPwD81eRkg4BOMdenU0bArEbc55yfepNuecZX1Io2gDBGT7Ht1FeQdozaDnOCfelADHjr9eKkxlcgYP60uCR/9bmgRGFVtpIz1IA68evNA5Gcf0xTtq7emPrTuowOKEhkfvwaUgKcA9OnH5U/ZgDPal2gnjjPp3pCIWUc4PHXHrjpgfzpv3S23jjvxU4BJAAIJOP8AmmcEc560AMwcZGKQZ4Hc9Pen4I4IzS8gg/kTQBGcld2Sf8+1Iy7tynH+0QOtTADvwM9frTcKRjrk49MimBC0aEg4wRzk0wg4Pc9anIJ+Y8HOT/AFpiqwwpPAHbv7mkBGFxx169KXBPT+XNOwQeOh9KMDBI547+tAEJAyGXOe+OaZjaM9h61N0AOcY6fSmsp3Eg5zSAgI9eceg5pcZyFHPA5+tTFed3fGKBjPmDrnjv+YpWGQ7SCRx7EDvTSoK4J4Hf1xVjbgfTj2qIkZKnBJxkY6UmBA2SeCv1puAO2PWrDZBGR0zj1qMg5OSPpSAj2nOVP5/4VE3IwAeev/6qsdc8YH0HWo+3PzMeT2FAIhIwSpPPXHrTcHjHykdTjP61KVA9O2MHp600j3IFNAyAjOfTP41GyE5Y/gOuasheB6c/nTCAOT+HqasRXK5IIXp0qMjgk5yM/TnpVsr6dP6U0qOMn60AUtpXgjBFNA6AgH/PerJQqQRgA9D61CfXaADn60AMIB7HGO9SZBbn+HoB+lN2+nbFKpIBC4GaAHkMM+hxkZ6U7I6D+H1PNM6k8fd796XnGT+ApgP4+vT9KXJIwR+VNGNxIyR60oz0YdaQDuM7ufbtTwT244xxxx+VQg4HzN0p/fHTPpQA4bQAByBx+VLkMMHoODjrz2z2H0poyVx070uAxHsBQA5VHfrx+Wf6+tPXDHjr9aj4JyOufyzTwAdrDncOKAJgcZJyAT39KF5HemZLkt0Hb60/JzjtQA/IyCOSPbBpcnAGAPQenemjJGc8jjvxjmjn7oHpyB0o... (base64 continues)
     const vcardPhotoLines = vcardPhotoBase64.match(/.{1,75}/g) || [];
-    const vcardData = [
+    const vcardLines = [
       'BEGIN:VCARD',
       'VERSION:3.0',
       'N:Ramsey;Travis;;;',
@@ -936,18 +936,27 @@
       `PHOTO;ENCODING=BASE64;TYPE=JPEG:${vcardPhotoLines.shift() || ''}`,
       ...vcardPhotoLines.map((line) => ` ${line}`),
       'END:VCARD'
-    ].join('\n');
+    ];
+    const vcardData = vcardLines.join('\r\n');
 
     const downloadVcard = () => {
-      const blob = new Blob([vcardData], { type: 'text/vcard' });
+      const blob = new Blob([vcardData], { type: 'text/vcard;charset=utf-8' });
       const url = URL.createObjectURL(blob);
+      const filename = 'Travis-Ramsey.vcf';
       const link = document.createElement('a');
       link.href = url;
-      link.download = 'Travis-Ramsey.vcf';
+      link.download = filename;
+      link.rel = 'noopener';
       document.body.appendChild(link);
-      link.click();
+      const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
+      if (isIOS || !('download' in HTMLAnchorElement.prototype)) {
+        const dataUri = `data:text/vcard;charset=utf-8,${encodeURIComponent(vcardData)}`;
+        window.location.href = dataUri;
+      } else {
+        link.click();
+      }
       document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
       showToast('Contact saved.');
     };
 
