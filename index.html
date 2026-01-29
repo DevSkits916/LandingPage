@@ -1,4 +1,3 @@
-<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -585,6 +584,10 @@
           <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M6.5 3.5 9.5 6.5c.6.6.6 1.5 0 2.1L8.4 9.7c1.2 2.2 3 4.1 5.3 5.3l1.1-1.1c.6-.6 1.5-.6 2.1 0l3 3c.6.6.6 1.5 0 2.1-1.1 1.1-2.8 1.6-4.3 1.2-6.1-1.6-10.8-6.3-12.4-12.4-.4-1.5.1-3.2 1.2-4.3.6-.6 1.5-.6 2.1 0Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
           Call
         </a>
+        <button class="btn ghost sound-btn" id="copyAllBtn" type="button" title="Copy a plain-text bundle of everything">
+          <svg class="i" viewBox="0 0 24 24" fill="none"><path d="M9 9h10v10H9V9Z" stroke="currentColor" stroke-width="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1" stroke="currentColor" stroke-width="2"/></svg>
+          Copy all
+        </button>
       </div>
     </header>
 
@@ -848,7 +851,7 @@
       });
       
       // Copy buttons
-      document.querySelectorAll('.smallBtn.copy').forEach(btn => {
+      document.querySelectorAll('.smallBtn.copy, #copyAllBtn').forEach(btn => {
         btn.addEventListener('click', (e) => {
           playClickSound('copy');
           createRipple(e, btn);
@@ -918,9 +921,7 @@
       }
     }
 
-    const vcardPhotoBase64 = '/9j/4AAQSkZJRgABAQAASABIAAD/4QBMRXhpZgAATU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAGAKADAAQAAAABAAAIAAAAAAD/wAARCAgABgADASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9sAQwACAgICAgIDAgIDBQMDAwUGBQUFBQYIBgYGBgYICggICAgICAoKCgoKCgoKDAwMDAwMDg4ODg4PDw8PDw8PDw8P/9sAQwECAgIEBAQHBAQHEAsJCxAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQ/90ABABg/9oADAMBAAIRAxEAPwD81eRkg4BOMdenU0bArEbc55yfepNuecZX1Io2gDBGT7Ht1FeQdozaDnOCfelADHjr9eKkxlcgYP60uCR/9bmgRGFVtpIz1IA68evNA5Gcf0xTtq7emPrTuowOKEhkfvwaUgKcA9OnH5U/ZgDPal2gnjjPp3pCIWUc4PHXHrjpgfzpv3S23jjvxU4BJAAIJOP8AmmcEc560AMwcZGKQZ4Hc9Pen4I4IzS8gg/kTQBGcld2Sf8+1Iy7tynH+0QOtTADvwM9frTcKRjrk49MimBC0aEg4wRzk0wg4Pc9anIJ+Y8HOT/AFpiqwwpPAHbv7mkBGFxx169KXBPT+XNOwQeOh9KMDBI547+tAEJAyGXOe+OaZjaM9h61N0AOcY6fSmsp3Eg5zSAgI9eceg5pcZyFHPA5+tTFed3fGKBjPmDrnjv+YpWGQ7SCRx7EDvTSoK4J4Hf1xVjbgfTj2qIkZKnBJxkY6UmBA2SeCv1puAO2PWrDZBGR0zj1qMg5OSPpSAj2nOVP5/4VE3IwAeev/6qsdc8YH0HWo+3PzMeT2FAIhIwSpPPXHrTcHjHykdTjP61KVA9O2MHp600j3IFNAyAjOfTP41GyE5Y/gOuasheB6c/nTCAOT+HqasRXK5IIXp0qMjgk5yM/TnpVsr6dP6U0qOMn60AUtpXgjBFNA6AgH/PerJQqQRgA9D61CfXaADn60AMIB7HGO9SZBbn+HoB+lN2+nbFKpIBC4GaAHkMM+hxkZ6U7I6D+H1PNM6k8fd796XnGT+ApgP4+vT9KXJIwR+VNGNxIyR60oz0YdaQDuM7ufbtTwT244xxxx+VQg4HzN0p/fHTPpQA4bQAByBx+VLkMMHoODjrz2z2H0poyVx070uAxHsBQA5VHfrx+Wf6+tPXDHjr9aj4JyOufyzTwAdrDncOKAJgcZJyAT39KF5HemZLkt0Hb60/JzjtQA/IyCOSPbBpcnAGAPQenemjJGc8jjvxjmjn7oHpyB0o... (base64 continues)
-    const vcardPhotoLines = vcardPhotoBase64.match(/.{1,75}/g) || [];
-    const vcardLines = [
+    const vcardData = [
       'BEGIN:VCARD',
       'VERSION:3.0',
       'N:Ramsey;Travis;;;',
@@ -933,30 +934,19 @@
       'URL;TYPE=X:https://x.com/devskits916?s=21',
       'URL;TYPE=Reddit:https://www.reddit.com/u/DevSkits/s/RE9W0sZoV1',
       'URL;TYPE=GoFundMe:https://gofund.me/6bbc0274e',
-      `PHOTO;ENCODING=BASE64;TYPE=JPEG:${vcardPhotoLines.shift() || ''}`,
-      ...vcardPhotoLines.map((line) => ` ${line}`),
       'END:VCARD'
-    ];
-    const vcardData = vcardLines.join('\r\n');
+    ].join('\n');
 
     const downloadVcard = () => {
-      const blob = new Blob([vcardData], { type: 'text/vcard;charset=utf-8' });
+      const blob = new Blob([vcardData], { type: 'text/vcard' });
       const url = URL.createObjectURL(blob);
-      const filename = 'Travis-Ramsey.vcf';
       const link = document.createElement('a');
       link.href = url;
-      link.download = filename;
-      link.rel = 'noopener';
+      link.download = 'Travis-Ramsey.vcf';
       document.body.appendChild(link);
-      const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-      if (isIOS || !('download' in HTMLAnchorElement.prototype)) {
-        const dataUri = `data:text/vcard;charset=utf-8,${encodeURIComponent(vcardData)}`;
-        window.location.href = dataUri;
-      } else {
-        link.click();
-      }
+      link.click();
       document.body.removeChild(link);
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      URL.revokeObjectURL(url);
       showToast('Contact saved.');
     };
 
@@ -969,6 +959,24 @@
     });
 
     document.getElementById('saveContactBtn').addEventListener('click', downloadVcard);
+
+    document.getElementById('copyAllBtn').addEventListener('click', () => {
+      const bundle = [
+        'Travis Ramsey',
+        '',
+        'Contact:',
+        'Email: DevSkits@icloud.com',
+        'Phone: 916-420-3052',
+        '',
+        'Links:',
+        'GoFundMe: https://gofund.me/6bbc0274e',
+        'GitHub: https://github.com/DevSkits916',
+        'Facebook: https://www.facebook.com/DevSkits?mibextid=wwXIfr',
+        'X: https://x.com/devskits916?s=21',
+        'Reddit: https://www.reddit.com/u/DevSkits/s/RE9W0sZoV1'
+      ].join('\n');
+      copyText(bundle);
+    });
 
     document.getElementById('year').textContent = new Date().getFullYear();
     
