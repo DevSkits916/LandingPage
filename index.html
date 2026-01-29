@@ -89,11 +89,19 @@
       text-decoration:none;
       display:inline-flex; gap:8px; align-items:center;
       box-shadow: 0 10px 22px rgba(0,0,0,.12);
-      transition: transform .08s ease, border-color .08s ease, background .08s ease;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease, box-shadow .18s ease, filter .18s ease;
       backdrop-filter: blur(8px);
     }
-    .btn:hover{transform: translateY(-1px); border-color: rgba(59,130,246,.60)}
-    .btn:active{transform: translateY(0)}
+    .btn:hover{
+      transform: translateY(-2px) scale(1.01);
+      border-color: rgba(59,130,246,.70);
+      box-shadow: 0 16px 30px rgba(15,23,42,.35);
+      filter: saturate(1.08);
+    }
+    .btn:active{
+      transform: translateY(0) scale(.98);
+      box-shadow: 0 8px 16px rgba(0,0,0,.18);
+    }
     .btn.primary{
       border-color: rgba(59,130,246,.60);
       background: linear-gradient(135deg, rgba(59,130,246,.95), rgba(249,115,22,.55));
@@ -199,10 +207,18 @@
       font-size:12.5px;
       text-decoration:none;
       cursor:pointer;
-      transition: transform .08s ease, border-color .08s ease;
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease, filter .16s ease;
+      box-shadow: 0 8px 18px rgba(0,0,0,.12);
     }
-    .smallBtn:hover{transform: translateY(-1px); border-color: rgba(249,115,22,.55)}
-    .smallBtn:active{transform: translateY(0)}
+    .smallBtn:hover{
+      transform: translateY(-2px) scale(1.02);
+      border-color: rgba(249,115,22,.65);
+      box-shadow: 0 12px 24px rgba(15,23,42,.24);
+    }
+    .smallBtn:active{
+      transform: translateY(0) scale(.97);
+      box-shadow: 0 6px 12px rgba(0,0,0,.18);
+    }
     .smallBtn.copy:hover{border-color: rgba(59,130,246,.70)}
     .smallBtn.warn:hover{border-color: rgba(245,158,11,.7)}
     .note{
@@ -223,10 +239,18 @@
       padding:12px 12px;
       display:flex; align-items:center; justify-content:space-between; gap:10px;
       text-decoration:none;
-      transition: transform .08s ease, border-color .08s ease;
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease, filter .18s ease;
     }
-    .linkCard:hover{transform: translateY(-1px); border-color: rgba(59,130,246,.60)}
-    .linkCard:active{transform: translateY(0)}
+    .linkCard:hover{
+      transform: translateY(-2px) scale(1.01);
+      border-color: rgba(59,130,246,.70);
+      box-shadow: 0 14px 28px rgba(15,23,42,.35);
+      filter: saturate(1.05);
+    }
+    .linkCard:active{
+      transform: translateY(0) scale(.98);
+      box-shadow: 0 8px 16px rgba(0,0,0,.2);
+    }
     .linkCard.github .icon{
       background: linear-gradient(180deg, #f5f5f5, #d4d4d4);
       color:#0b1220;
@@ -299,6 +323,31 @@
 
     svg{display:block}
     .i{width:18px; height:18px; opacity:.9}
+
+    .btn.is-clicked,
+    .smallBtn.is-clicked,
+    .linkCard.is-clicked{
+      animation: tapPulse .28s ease;
+    }
+
+    @keyframes tapPulse{
+      0%{transform: scale(1)}
+      40%{transform: scale(.96)}
+      100%{transform: scale(1)}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .btn,
+      .smallBtn,
+      .linkCard{
+        transition: none;
+      }
+      .btn.is-clicked,
+      .smallBtn.is-clicked,
+      .linkCard.is-clicked{
+        animation: none;
+      }
+    }
   </style>
 </head>
 <body>
@@ -500,6 +549,27 @@
       window.__toastTimer = setTimeout(() => toast.classList.remove('show'), 1400);
     };
 
+    const playClickSound = (() => {
+      let audioContext;
+      return () => {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        if (!audioContext) audioContext = new AudioContext();
+        if (audioContext.state === 'suspended') audioContext.resume();
+        const oscillator = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        oscillator.type = 'triangle';
+        oscillator.frequency.value = 520;
+        gain.gain.value = 0.0001;
+        gain.gain.exponentialRampToValueAtTime(0.08, audioContext.currentTime + 0.01);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 0.12);
+        oscillator.connect(gain);
+        gain.connect(audioContext.destination);
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 0.12);
+      };
+    })();
+
     async function copyText(text){
       try{
         await navigator.clipboard.writeText(text);
@@ -557,6 +627,17 @@
         e.preventDefault();
         copyText(btn.getAttribute('data-copy-btn'));
       }
+    });
+
+    document.addEventListener('click', (e) => {
+      const target = e.target.closest('.btn, .smallBtn, .linkCard');
+      if (!target) return;
+      target.classList.remove('is-clicked');
+      void target.offsetWidth;
+      target.classList.add('is-clicked');
+      if (target.__clickTimer) clearTimeout(target.__clickTimer);
+      target.__clickTimer = setTimeout(() => target.classList.remove('is-clicked'), 220);
+      playClickSound();
     });
 
     document.getElementById('saveContactBtn').addEventListener('click', downloadVcard);
