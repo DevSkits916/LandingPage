@@ -546,6 +546,123 @@
       }
     }
 
+
+    /* Startup overlay animation */
+    :root{
+      --startup-bg: #050811;
+      --startup-glow: rgba(59,130,246,.28);
+      --startup-text: rgba(230,237,247,.92);
+      --startup-muted: rgba(154,167,189,.86);
+      --startup-line: rgba(255,255,255,.12);
+      --startup-dur: 1.45s;
+      --startup-ease: cubic-bezier(.22,.61,.36,1);
+    }
+    .startup-overlay{
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      display:grid;
+      place-items:center;
+      background:radial-gradient(120% 120% at 50% 20%, #0b1120 0%, var(--startup-bg) 55%, #04060d 100%);
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+      transition:opacity .36s var(--startup-ease), visibility .36s step-end;
+      isolation:isolate;
+    }
+    .startup-overlay::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:repeating-linear-gradient(to bottom, rgba(255,255,255,.02) 0, rgba(255,255,255,.02) 1px, transparent 1px, transparent 4px);
+      opacity:.32;
+    }
+    .startup-overlay.is-active{
+      opacity:1;
+      visibility:visible;
+      pointer-events:auto;
+      transition:opacity .25s var(--startup-ease);
+    }
+    .startup-overlay.is-leaving{
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+    }
+    .startup-panel{
+      position:relative;
+      width:min(88vw, 480px);
+      text-align:center;
+      padding:24px 20px;
+      color:var(--startup-text);
+      font-family:var(--mono);
+    }
+    .startup-mark{
+      margin:0;
+      font-family:var(--sans);
+      font-size:clamp(44px, 12vw, 80px);
+      line-height:1;
+      letter-spacing:.08em;
+      font-weight:800;
+      color:#f3f7ff;
+      text-shadow:0 0 24px var(--startup-glow);
+    }
+    .startup-status{
+      list-style:none;
+      margin:14px auto 16px;
+      padding:0;
+      width:min(100%, 340px);
+      text-align:left;
+      font-size:13px;
+      line-height:1.5;
+      color:var(--startup-muted);
+      min-height:72px;
+    }
+    .startup-status li{
+      min-height:1.5em;
+      white-space:nowrap;
+      overflow:hidden;
+    }
+    .startup-bar{
+      height:2px;
+      width:min(100%, 340px);
+      margin:0 auto;
+      background:var(--startup-line);
+      border-radius:999px;
+      overflow:hidden;
+    }
+    .startup-bar-fill{
+      height:100%;
+      width:0;
+      background:linear-gradient(90deg, rgba(59,130,246,.9), rgba(249,115,22,.75));
+      transition:width var(--startup-dur) linear;
+      will-change:width;
+    }
+    body.startup-active .wrap{
+      opacity:.01;
+      filter:blur(8px);
+      pointer-events:none;
+      transition:opacity .35s var(--startup-ease), filter .35s var(--startup-ease);
+    }
+    body.startup-active .animated-bg,
+    body.startup-active .particles{pointer-events:none;}
+    body.startup-reveal .wrap{
+      opacity:1;
+      filter:blur(0);
+      pointer-events:auto;
+      transition:opacity .42s var(--startup-ease), filter .42s var(--startup-ease);
+    }
+    .logo{cursor:pointer;}
+    @media (max-width:520px){
+      .startup-panel{padding:20px 16px;}
+      .startup-status{font-size:12px; min-height:66px;}
+    }
+    @media (prefers-reduced-motion: reduce){
+      .startup-overlay,
+      .startup-bar-fill,
+      .wrap{transition:none !important;}
+    }
+
     svg{display:block}
     .i{width:18px; height:18px; opacity:.9}
   </style>
@@ -561,10 +678,26 @@
   </div>
   <div class="particles" id="particles"></div>
 
+  <!-- Startup overlay markup -->
+  <div class="startup-overlay" id="startupOverlay" aria-hidden="true" hidden>
+    <div class="startup-panel" aria-hidden="true">
+      <p class="startup-mark">TR</p>
+      <ul class="startup-status" id="startupStatusLines">
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+      <div class="startup-bar" role="presentation">
+        <div class="startup-bar-fill" id="startupBarFill"></div>
+      </div>
+    </div>
+  </div>
+
+
   <div class="wrap">
     <header class="top">
       <div class="brand">
-        <div class="logo" aria-hidden="true"><span>TR</span></div>
+        <div class="logo" id="heroMonogram" role="button" tabindex="0" aria-label="Replay startup animation" title="Replay startup animation"><span>TR</span></div>
         <div class="title">
           <h1>Travis Ramsey</h1>
           <p>Contact info and social links in one place.</p>
@@ -978,9 +1111,103 @@
 
     document.getElementById('year').textContent = new Date().getFullYear();
     
+
+    // Startup control JS
+    function getStartupSeen() {
+      try { return sessionStorage.getItem('trStartupSeen') === '1'; }
+      catch (error) { return false; }
+    }
+
+    function setStartupSeen() {
+      try { sessionStorage.setItem('trStartupSeen', '1'); }
+      catch (error) { /* sessionStorage may be disabled */ }
+    }
+
+    function typeLine(el, text, speed, delay) {
+      return new Promise((resolve) => {
+        let i = 0;
+        setTimeout(() => {
+          const tick = () => {
+            el.textContent = text.slice(0, i);
+            i += 1;
+            if (i <= text.length) {
+              setTimeout(tick, speed);
+            } else {
+              resolve();
+            }
+          };
+          tick();
+        }, delay);
+      });
+    }
+
+    async function runStartupSequence(forceReplay = false) {
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduceMotion) {
+        return;
+      }
+      if (!forceReplay && getStartupSeen()) {
+        document.body.classList.add('startup-reveal');
+        return;
+      }
+
+      const overlay = document.getElementById('startupOverlay');
+      const bar = document.getElementById('startupBarFill');
+      const lineEls = document.querySelectorAll('#startupStatusLines li');
+      if (!overlay || !bar || lineEls.length < 3) {
+        return;
+      }
+
+      lineEls.forEach((line) => { line.textContent = ''; });
+      bar.style.width = '0%';
+      overlay.hidden = false;
+      document.body.classList.remove('startup-reveal');
+      document.body.classList.add('startup-active');
+      overlay.classList.add('is-active');
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          bar.style.width = '100%';
+        });
+      });
+
+      await Promise.all([
+        typeLine(lineEls[0], 'initializing contact hub', 13, 70),
+        typeLine(lineEls[1], 'loading links', 14, 340),
+        typeLine(lineEls[2], 'signal locked', 14, 620),
+        new Promise((resolve) => setTimeout(resolve, 1480))
+      ]);
+
+      overlay.classList.remove('is-active');
+      overlay.classList.add('is-leaving');
+      document.body.classList.remove('startup-active');
+      document.body.classList.add('startup-reveal');
+      setStartupSeen();
+
+      setTimeout(() => {
+        overlay.hidden = true;
+        overlay.classList.remove('is-leaving');
+      }, 360);
+    }
+
+    function initStartupSequence() {
+      runStartupSequence(false);
+      const logo = document.getElementById('heroMonogram');
+      if (!logo) return;
+      const replay = () => runStartupSequence(true);
+      logo.addEventListener('click', replay);
+      logo.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          replay();
+        }
+      });
+    }
+
     // Initialize
     createParticles();
     setupButtonSounds();
+    initStartupSequence();
   </script>
 </body>
 </html>
