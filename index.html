@@ -151,6 +151,78 @@
       }
     }
 
+    /* Intro overlay animation CSS */
+    .intro-overlay{
+      position:fixed;
+      inset:0;
+      z-index:9999;
+      display:grid;
+      place-items:center;
+      background: radial-gradient(circle at 50% 30%, #101826 0%, #04070d 60%, #020308 100%);
+      color:#d8ffe6;
+      opacity:0;
+      transform: scale(1.015);
+      pointer-events:auto;
+      transition: opacity .45s ease, transform .6s ease;
+      will-change: opacity, transform;
+    }
+    .intro-overlay::before{
+      content:'';
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background: repeating-linear-gradient(0deg, rgba(120,255,170,.08) 0 1px, transparent 1px 3px);
+      mix-blend-mode:soft-light;
+      opacity:.22;
+    }
+    .intro-overlay::after{
+      content:'';
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,.45) 85%);
+    }
+    .intro-shell{
+      width:min(560px,92vw);
+      border:1px solid rgba(120,255,170,.25);
+      background:rgba(4,10,16,.85);
+      box-shadow:0 20px 50px rgba(0,0,0,.55), inset 0 0 25px rgba(80,255,170,.08);
+      border-radius:16px;
+      padding:20px 18px 16px;
+      position:relative;
+      backdrop-filter: blur(4px);
+    }
+    .intro-header{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+    .intro-mark{
+      width:40px;height:40px;border-radius:10px;display:grid;place-items:center;
+      font:700 16px/1 var(--mono);letter-spacing:.8px;color:#d8ffe6;
+      border:1px solid rgba(120,255,170,.45);background:linear-gradient(135deg, rgba(13,45,33,.9), rgba(7,18,25,.95));
+      box-shadow:0 0 16px rgba(92,255,178,.22);
+    }
+    .intro-title{font:600 14px/1.4 var(--mono);color:#b5f5cc;text-transform:uppercase;letter-spacing:.12em;}
+    .intro-lines{font:500 13px/1.5 var(--mono);color:#9fefba;min-height:96px;}
+    .intro-line{opacity:0;transform:translateY(4px);transition:opacity .25s ease, transform .25s ease;white-space:pre-wrap;}
+    .intro-line.show{opacity:.95;transform:translateY(0);}
+    .cursor{display:inline-block;width:.6ch;animation: blink 1s steps(1,end) infinite;}
+    @keyframes blink{50%{opacity:0;}}
+    .intro-progress{margin-top:8px;}
+    .intro-progress-track{height:7px;border-radius:999px;background:rgba(165,255,203,.16);overflow:hidden;}
+    .intro-progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#6ef9a7,#b7ffd4);transition:width .22s linear;}
+    .intro-progress-meta{display:flex;justify-content:space-between;font:600 11px/1.6 var(--mono);color:#a7efc1;margin-top:5px;}
+    .intro-skip{margin-top:10px;font:500 11px/1.4 var(--mono);color:rgba(170,245,198,.75);text-align:right;}
+    .intro-overlay.is-visible{opacity:1;transform:scale(1);}
+    .intro-overlay.is-exit{opacity:0;transform:scale(1.01);pointer-events:none;}
+
+    .wrap{opacity:1;transform:none;transition: opacity .5s ease, transform .5s ease;}
+    body.intro-active .wrap{opacity:0;transform:translateY(10px);pointer-events:none;}
+    body.intro-complete .wrap{opacity:1;transform:none;pointer-events:auto;}
+
+    @media (prefers-reduced-motion: reduce){
+      .intro-overlay,.intro-line,.intro-progress-fill,.wrap{transition-duration:.15s !important;animation:none !important;}
+      .intro-overlay::before{display:none;}
+    }
+
+
     a{color:inherit}
     .wrap{max-width:var(--max); margin:0 auto; padding:28px 18px 44px; position: relative; z-index: 1;}
     .top{
@@ -598,10 +670,37 @@
   </div>
   <div class="particles" id="particles"></div>
 
-  <div class="wrap">
+  <!-- Intro overlay markup -->
+  <div class="intro-overlay" id="introOverlay" aria-hidden="true">
+    <div class="intro-shell">
+      <div class="intro-header">
+        <div class="intro-mark">TR</div>
+        <div class="intro-title">DevSkits Interface Boot</div>
+      </div>
+      <div class="intro-lines" id="introLines" aria-live="polite">
+        <div class="intro-line" data-line="0">Initializing interface<span class="cursor" aria-hidden="true">▌</span></div>
+        <div class="intro-line" data-line="1">Loading contact modules</div>
+        <div class="intro-line" data-line="2">Syncing links</div>
+        <div class="intro-line" data-line="3">Ready</div>
+      </div>
+      <div class="intro-progress">
+        <div class="intro-progress-track" role="presentation">
+          <div class="intro-progress-fill" id="introProgressFill"></div>
+        </div>
+        <div class="intro-progress-meta">
+          <span id="introStatus">boot sequence</span>
+          <span id="introPercent">0%</span>
+        </div>
+      </div>
+      <div class="intro-skip">tap to skip</div>
+    </div>
+  </div>
+
+
+  <div class="wrap" id="mainContent">
     <header class="top">
       <div class="brand">
-        <div class="logo"><span>TR</span></div>
+        <div class="logo" id="heroMonogram"><span>TR</span></div>
         <div class="title">
           <h1>Travis Ramsey</h1>
           <p>Contact info and social links in one place.</p>
@@ -1025,10 +1124,82 @@
     document.getElementById('year').textContent = new Date().getFullYear();
     
 
+
+    // Intro sequencing JS + sessionStorage logic + reduced-motion handling
+    const introOverlay = document.getElementById('introOverlay');
+    const introLines = [...document.querySelectorAll('.intro-line')];
+    const introFill = document.getElementById('introProgressFill');
+    const introPercent = document.getElementById('introPercent');
+    const introStatus = document.getElementById('introStatus');
+    const INTRO_KEY = 'devskits_intro_seen';
+
+    const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    async function runIntro() {
+      if (!introOverlay) return;
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const seen = sessionStorage.getItem(INTRO_KEY) === '1';
+      const shortMode = reducedMotion || seen;
+      const totalDuration = shortMode ? 420 : 3200;
+      let stopped = false;
+
+      const finish = async () => {
+        if (stopped) return;
+        stopped = true;
+        introStatus.textContent = 'launching';
+        introFill.style.width = '100%';
+        introPercent.textContent = '100%';
+        document.body.classList.remove('intro-active');
+        document.body.classList.add('intro-complete');
+        introOverlay.classList.add('is-exit');
+        await wait(shortMode ? 180 : 420);
+        introOverlay.remove();
+      };
+
+      introOverlay.addEventListener('click', finish, { once: true });
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') finish();
+      }, { once: true });
+
+      document.body.classList.add('intro-active');
+      requestAnimationFrame(() => introOverlay.classList.add('is-visible'));
+
+      if (shortMode) {
+        introLines[0]?.classList.add('show');
+        await wait(totalDuration);
+        await finish();
+        sessionStorage.setItem(INTRO_KEY, '1');
+        return;
+      }
+
+      const lineTimes = [220, 780, 1320, 2140];
+      const labels = ['booting', 'loading', 'syncing', 'ready'];
+      lineTimes.forEach((time, index) => {
+        setTimeout(() => {
+          introLines[index]?.classList.add('show');
+          introStatus.textContent = labels[index];
+        }, time);
+      });
+
+      const start = performance.now();
+      const timer = setInterval(() => {
+        const elapsed = performance.now() - start;
+        const pct = Math.min(100, Math.round((elapsed / totalDuration) * 100));
+        introFill.style.width = pct + '%';
+        introPercent.textContent = pct + '%';
+      }, 80);
+
+      await wait(totalDuration);
+      clearInterval(timer);
+      await finish();
+      sessionStorage.setItem(INTRO_KEY, '1');
+    }
+
     // Initialize
     setHeroLogoImage();
     createParticles();
     setupButtonSounds();
+    runIntro();
   </script>
 </body>
 </html>
