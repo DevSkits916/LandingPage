@@ -547,120 +547,197 @@
     }
 
 
-    /* Startup overlay animation */
+    /* ===== Boot Overlay System ===== */
     :root{
-      --startup-bg: #050811;
-      --startup-glow: rgba(59,130,246,.28);
-      --startup-text: rgba(230,237,247,.92);
-      --startup-muted: rgba(154,167,189,.86);
-      --startup-line: rgba(255,255,255,.12);
-      --startup-dur: 1.45s;
-      --startup-ease: cubic-bezier(.22,.61,.36,1);
+      --boot-bg:#050913;
+      --boot-bg2:#0a1120;
+      --boot-glow:rgba(59,130,246,.34);
+      --boot-text:#eaf1ff;
+      --boot-muted:rgba(162,177,204,.94);
+      --boot-line:rgba(255,255,255,.12);
+      --boot-accent:#3b82f6;
+      --boot-accent2:#f97316;
+      --boot-ease:cubic-bezier(.22,.61,.36,1);
+      --boot-min-duration:1180ms;
+      --boot-max-duration:2400ms;
     }
-    .startup-overlay{
+
+    body.boot-active .wrap{
+      opacity:.001;
+      visibility:hidden;
+      pointer-events:none;
+    }
+
+    body.boot-revealed .wrap{
+      visibility:visible;
+      animation:wrap-reveal .55s var(--boot-ease) both;
+    }
+
+    @keyframes wrap-reveal{
+      from{opacity:0; transform:translateY(8px); filter:blur(4px);} 
+      to{opacity:1; transform:translateY(0); filter:blur(0);} 
+    }
+
+    body.boot-active .blob,
+    body.boot-active .particle{animation-play-state:paused;}
+
+    .boot-overlay{
       position:fixed;
       inset:0;
       z-index:9999;
       display:grid;
       place-items:center;
-      background:radial-gradient(120% 120% at 50% 20%, #0b1120 0%, var(--startup-bg) 55%, #04060d 100%);
+      padding:24px;
+      background:
+        radial-gradient(120% 110% at 50% 0%, rgba(59,130,246,.22) 0%, transparent 50%),
+        linear-gradient(155deg, var(--boot-bg2), var(--boot-bg));
       opacity:0;
       visibility:hidden;
       pointer-events:none;
-      transition:opacity .36s var(--startup-ease), visibility .36s step-end;
+      transition:opacity .44s var(--boot-ease), visibility .44s step-end;
       isolation:isolate;
     }
-    .startup-overlay::before{
+
+    .boot-overlay::before{
       content:'';
       position:absolute;
       inset:0;
       pointer-events:none;
-      background:repeating-linear-gradient(to bottom, rgba(255,255,255,.02) 0, rgba(255,255,255,.02) 1px, transparent 1px, transparent 4px);
-      opacity:.32;
+      background:repeating-linear-gradient(to bottom, rgba(255,255,255,.03) 0px, rgba(255,255,255,.03) 1px, transparent 1px, transparent 4px);
+      mix-blend-mode:soft-light;
+      opacity:.42;
     }
-    .startup-overlay.is-active{
+
+    .boot-overlay::after{
+      content:'';
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:radial-gradient(circle at 50% 30%, transparent 28%, rgba(0,0,0,.44) 100%);
+      opacity:.72;
+    }
+
+    .boot-overlay.is-active{
       opacity:1;
       visibility:visible;
       pointer-events:auto;
-      transition:opacity .25s var(--startup-ease);
     }
-    .startup-overlay.is-leaving{
+
+    .boot-overlay.is-leaving{
       opacity:0;
       visibility:hidden;
       pointer-events:none;
     }
-    .startup-panel{
+
+    .boot-panel{
+      width:min(92vw, 540px);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:20px;
+      padding:24px 22px 20px;
+      background:linear-gradient(165deg, rgba(10,16,31,.86), rgba(5,9,19,.82));
+      backdrop-filter:blur(12px);
+      box-shadow:0 28px 70px rgba(0,0,0,.62), inset 0 1px 0 rgba(255,255,255,.08), 0 0 40px var(--boot-glow);
       position:relative;
-      width:min(88vw, 480px);
-      text-align:center;
-      padding:24px 20px;
-      color:var(--startup-text);
+      z-index:1;
+      overflow:hidden;
+    }
+
+    .boot-brand{
+      margin:0;
+      display:flex;
+      gap:12px;
+      align-items:baseline;
+      justify-content:center;
+      font-weight:850;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      color:var(--boot-text);
+    }
+
+    .boot-brand .mono{
+      font-size:clamp(2.2rem, 9vw, 3.4rem);
+      line-height:1;
+      text-shadow:0 0 22px var(--boot-glow);
+    }
+
+    .boot-brand .name{
+      font-size:clamp(.86rem, 2.5vw, 1rem);
+      color:var(--boot-muted);
       font-family:var(--mono);
     }
-    .startup-mark{
-      margin:0;
-      font-family:var(--sans);
-      font-size:clamp(44px, 12vw, 80px);
-      line-height:1;
-      letter-spacing:.08em;
-      font-weight:800;
-      color:#f3f7ff;
-      text-shadow:0 0 24px var(--startup-glow);
-    }
-    .startup-status{
-      list-style:none;
-      margin:14px auto 16px;
-      padding:0;
-      width:min(100%, 340px);
-      text-align:left;
+
+    .boot-status{
+      margin:16px 0 0;
+      min-height:1.6em;
+      text-align:center;
+      color:var(--boot-text);
+      font-family:var(--mono);
       font-size:13px;
-      line-height:1.5;
-      color:var(--startup-muted);
-      min-height:72px;
+      letter-spacing:.05em;
     }
-    .startup-status li{
-      min-height:1.5em;
+
+    .boot-log{
+      margin:12px 0 16px;
+      padding:0;
+      list-style:none;
+      color:var(--boot-muted);
+      font-family:var(--mono);
+      font-size:12px;
+      min-height:62px;
+    }
+
+    .boot-log li{
+      min-height:1.4em;
+      opacity:.6;
+      transition:opacity .2s ease, color .2s ease;
       white-space:nowrap;
       overflow:hidden;
+      text-overflow:ellipsis;
     }
-    .startup-bar{
-      height:2px;
-      width:min(100%, 340px);
-      margin:0 auto;
-      background:var(--startup-line);
+
+    .boot-log li.is-done{opacity:1; color:var(--boot-text);}
+
+    .boot-progress{
+      width:100%;
+      height:10px;
       border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background:
+        linear-gradient(to right, rgba(255,255,255,.04), rgba(255,255,255,.02)),
+        repeating-linear-gradient(to right, transparent 0 9%, rgba(255,255,255,.09) 9% 10%);
       overflow:hidden;
+      position:relative;
     }
-    .startup-bar-fill{
+
+    .boot-progress-fill{
       height:100%;
-      width:0;
-      background:linear-gradient(90deg, rgba(59,130,246,.9), rgba(249,115,22,.75));
-      transition:width var(--startup-dur) linear;
+      width:0%;
+      border-radius:inherit;
+      background:linear-gradient(90deg, var(--boot-accent), var(--boot-accent2));
+      box-shadow:0 0 20px rgba(59,130,246,.45);
+      transition:width .26s linear;
       will-change:width;
     }
-    body.startup-active .wrap{
-      opacity:.01;
-      filter:blur(8px);
-      pointer-events:none;
-      transition:opacity .35s var(--startup-ease), filter .35s var(--startup-ease);
+
+    .boot-hint{
+      margin:10px 0 0;
+      text-align:center;
+      font-size:11px;
+      color:rgba(162,177,204,.82);
+      font-family:var(--mono);
+      letter-spacing:.04em;
     }
-    body.startup-active .animated-bg,
-    body.startup-active .particles{pointer-events:none;}
-    body.startup-reveal .wrap{
-      opacity:1;
-      filter:blur(0);
-      pointer-events:auto;
-      transition:opacity .42s var(--startup-ease), filter .42s var(--startup-ease);
-    }
-    .logo{cursor:pointer;}
+
     @media (max-width:520px){
-      .startup-panel{padding:20px 16px;}
-      .startup-status{font-size:12px; min-height:66px;}
+      .boot-panel{padding:20px 16px 16px; border-radius:16px;}
+      .boot-log{font-size:11.5px; min-height:58px;}
+      .boot-status{font-size:12px;}
+      .boot-hint{font-size:10.5px;}
     }
+
     @media (prefers-reduced-motion: reduce){
-      .startup-overlay,
-      .startup-bar-fill,
-      .wrap{transition:none !important;}
+      .blob,.particle,.logo,.btn::before,.linkCard::before{animation:none !important; transition:none !important;}
+      .boot-overlay,.boot-panel,.boot-progress-fill,.wrap{transition:none !important; animation:none !important;}
     }
 
     svg{display:block}
@@ -678,19 +755,22 @@
   </div>
   <div class="particles" id="particles"></div>
 
-  <!-- Startup overlay markup -->
-  <div class="startup-overlay" id="startupOverlay" aria-hidden="true" hidden>
-    <div class="startup-panel" aria-hidden="true">
-      <p class="startup-mark">TR</p>
-      <ul class="startup-status" id="startupStatusLines">
-        <li></li>
-        <li></li>
-        <li></li>
+  <!-- Boot overlay (JS-enhanced, content remains visible if JS fails) -->
+  <div class="boot-overlay" id="bootOverlay" aria-live="polite" aria-label="System startup" hidden>
+    <section class="boot-panel" role="status">
+      <p class="boot-brand"><span class="mono">TR</span> <span class="name">DevSkits Interface</span></p>
+      <p class="boot-status" id="bootStatusText">Preparing startup sequence…</p>
+      <ul class="boot-log" id="bootLog" aria-hidden="true">
+        <li data-step>Initializing interface</li>
+        <li data-step>Loading contact modules</li>
+        <li data-step>Syncing links</li>
+        <li data-step>Ready</li>
       </ul>
-      <div class="startup-bar" role="presentation">
-        <div class="startup-bar-fill" id="startupBarFill"></div>
+      <div class="boot-progress" aria-hidden="true">
+        <div class="boot-progress-fill" id="bootProgressFill"></div>
       </div>
-    </div>
+      <p class="boot-hint" id="bootHint">Tap anywhere to skip</p>
+    </section>
   </div>
 
 
@@ -1112,89 +1192,153 @@
     document.getElementById('year').textContent = new Date().getFullYear();
     
 
-    // Startup control JS
-    function getStartupSeen() {
-      try { return sessionStorage.getItem('trStartupSeen') === '1'; }
-      catch (error) { return false; }
-    }
+    // ===== Boot sequence controller =====
+    const bootController = (() => {
+      const SESSION_KEY = 'devskitsBootSeen';
+      const BASE_STEPS = [
+        { label: 'Initializing interface', detail: 'Bringing core layers online' },
+        { label: 'Loading contact modules', detail: 'Registering email, call, and save actions' },
+        { label: 'Syncing links', detail: 'Verifying social endpoints' },
+        { label: 'Ready', detail: 'Interface ready' }
+      ];
 
-    function setStartupSeen() {
-      try { sessionStorage.setItem('trStartupSeen', '1'); }
-      catch (error) { /* sessionStorage may be disabled */ }
-    }
+      let finished = false;
+      let minReached = false;
+      let canSkip = false;
+      let pendingFinish = false;
+      let statusTimer = null;
+      let teardownFns = [];
 
-    function typeLine(el, text, speed, delay) {
-      return new Promise((resolve) => {
-        let i = 0;
+      const getSeen = () => {
+        try { return sessionStorage.getItem(SESSION_KEY) === '1'; }
+        catch { return false; }
+      };
+
+      const setSeen = () => {
+        try { sessionStorage.setItem(SESSION_KEY, '1'); }
+        catch { /* storage unavailable */ }
+      };
+
+      const clearBootTimers = () => {
+        if (statusTimer) {
+          clearTimeout(statusTimer);
+          statusTimer = null;
+        }
+      };
+
+      const complete = (overlay, immediate = false) => {
+        if (finished) return;
+        if (!minReached && !immediate) {
+          pendingFinish = true;
+          return;
+        }
+        finished = true;
+        clearBootTimers();
+        teardownFns.forEach((fn) => fn());
+        teardownFns = [];
+
+        overlay.classList.remove('is-active');
+        overlay.classList.add('is-leaving');
+        document.body.classList.remove('boot-active');
+        document.body.classList.add('boot-revealed');
+        setSeen();
+
         setTimeout(() => {
-          const tick = () => {
-            el.textContent = text.slice(0, i);
-            i += 1;
-            if (i <= text.length) {
-              setTimeout(tick, speed);
-            } else {
-              resolve();
-            }
-          };
-          tick();
-        }, delay);
-      });
-    }
+          overlay.hidden = true;
+          overlay.classList.remove('is-leaving');
+        }, immediate ? 0 : 380);
+      };
 
-    async function runStartupSequence(forceReplay = false) {
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (reduceMotion) {
-        return;
-      }
-      if (!forceReplay && getStartupSeen()) {
-        document.body.classList.add('startup-reveal');
-        return;
-      }
+      const run = ({ forceReplay = false } = {}) => {
+        const overlay = document.getElementById('bootOverlay');
+        const progress = document.getElementById('bootProgressFill');
+        const status = document.getElementById('bootStatusText');
+        const hint = document.getElementById('bootHint');
+        const stepEls = [...document.querySelectorAll('#bootLog [data-step]')];
+        if (!overlay || !progress || !status || stepEls.length !== BASE_STEPS.length) {
+          document.body.classList.add('boot-revealed');
+          return;
+        }
 
-      const overlay = document.getElementById('startupOverlay');
-      const bar = document.getElementById('startupBarFill');
-      const lineEls = document.querySelectorAll('#startupStatusLines li');
-      if (!overlay || !bar || lineEls.length < 3) {
-        return;
-      }
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const alreadySeen = !forceReplay && getSeen();
 
-      lineEls.forEach((line) => { line.textContent = ''; });
-      bar.style.width = '0%';
-      overlay.hidden = false;
-      document.body.classList.remove('startup-reveal');
-      document.body.classList.add('startup-active');
-      overlay.classList.add('is-active');
+        const minDuration = reduceMotion ? 120 : 720;
+        const totalDuration = reduceMotion ? 420 : (alreadySeen ? 980 : 2180);
 
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          bar.style.width = '100%';
-        });
-      });
+        finished = false;
+        minReached = false;
+        canSkip = false;
+        pendingFinish = false;
+        clearBootTimers();
+        teardownFns.forEach((fn) => fn());
+        teardownFns = [];
 
-      await Promise.all([
-        typeLine(lineEls[0], 'initializing contact hub', 13, 70),
-        typeLine(lineEls[1], 'loading links', 14, 340),
-        typeLine(lineEls[2], 'signal locked', 14, 620),
-        new Promise((resolve) => setTimeout(resolve, 1480))
-      ]);
-
-      overlay.classList.remove('is-active');
-      overlay.classList.add('is-leaving');
-      document.body.classList.remove('startup-active');
-      document.body.classList.add('startup-reveal');
-      setStartupSeen();
-
-      setTimeout(() => {
-        overlay.hidden = true;
+        overlay.hidden = false;
         overlay.classList.remove('is-leaving');
-      }, 360);
-    }
+        document.body.classList.remove('boot-revealed');
+        document.body.classList.add('boot-active');
+        overlay.classList.add('is-active');
 
-    function initStartupSequence() {
-      runStartupSequence(false);
+        progress.style.width = '0%';
+        stepEls.forEach((el, idx) => {
+          el.textContent = BASE_STEPS[idx].label;
+          el.classList.remove('is-done');
+        });
+        status.textContent = 'Booting DevSkits interface';
+        hint.style.opacity = reduceMotion ? '0' : '1';
+
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          progress.style.width = '100%';
+        }));
+
+        const activateStep = (index) => {
+          stepEls.forEach((node, nodeIndex) => node.classList.toggle('is-done', nodeIndex <= index));
+          status.textContent = BASE_STEPS[index].detail;
+        };
+
+        const stepGap = Math.max(120, Math.floor(totalDuration / BASE_STEPS.length));
+        BASE_STEPS.forEach((_, idx) => {
+          const timer = setTimeout(() => activateStep(idx), idx * stepGap + 120);
+          teardownFns.push(() => clearTimeout(timer));
+        });
+
+        statusTimer = setTimeout(() => complete(overlay, reduceMotion), totalDuration + 180);
+
+        const minTimer = setTimeout(() => {
+          minReached = true;
+          canSkip = true;
+          if (pendingFinish) complete(overlay);
+        }, minDuration);
+        teardownFns.push(() => clearTimeout(minTimer));
+
+        const skipHandler = () => {
+          if (!canSkip) return;
+          complete(overlay);
+        };
+
+        const keySkipHandler = (event) => {
+          if (event.key === 'Enter' || event.key === ' ') skipHandler();
+        };
+
+        overlay.addEventListener('click', skipHandler);
+        overlay.addEventListener('touchstart', skipHandler, { passive: true });
+        overlay.addEventListener('keydown', keySkipHandler);
+        teardownFns.push(() => {
+          overlay.removeEventListener('click', skipHandler);
+          overlay.removeEventListener('touchstart', skipHandler);
+          overlay.removeEventListener('keydown', keySkipHandler);
+        });
+      };
+
+      return { run };
+    })();
+
+    function initBootSequence() {
+      bootController.run();
       const logo = document.getElementById('heroMonogram');
       if (!logo) return;
-      const replay = () => runStartupSequence(true);
+      const replay = () => bootController.run({ forceReplay: true });
       logo.addEventListener('click', replay);
       logo.addEventListener('keydown', (event) => {
         if (event.key === 'Enter' || event.key === ' ') {
@@ -1207,7 +1351,7 @@
     // Initialize
     createParticles();
     setupButtonSounds();
-    initStartupSequence();
+    initBootSequence();
   </script>
 </body>
 </html>
