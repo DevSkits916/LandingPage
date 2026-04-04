@@ -1140,7 +1140,7 @@
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const seen = sessionStorage.getItem(INTRO_KEY) === '1';
       const shortMode = reducedMotion || seen;
-      const totalDuration = shortMode ? 420 : 3200;
+      const totalDuration = shortMode ? 220 : 1800;
       let stopped = false;
 
       const finish = async () => {
@@ -1172,7 +1172,7 @@
         return;
       }
 
-      const lineTimes = [220, 780, 1320, 2140];
+      const lineTimes = [120, 420, 780, 1220];
       const labels = ['booting', 'loading', 'syncing', 'ready'];
       lineTimes.forEach((time, index) => {
         setTimeout(() => {
