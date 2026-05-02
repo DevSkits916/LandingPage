@@ -35,6 +35,17 @@
       line-height:1.5;
       overflow-x: hidden;
     }
+
+    body.boot-active #mainContent{
+      opacity:0;
+      filter:blur(6px);
+      transition:opacity .45s ease, filter .45s ease;
+    }
+
+    body.main-ready #mainContent{
+      opacity:1;
+      filter:blur(0);
+    }
     
     .animated-bg {
       position: fixed;
@@ -151,137 +162,77 @@
       }
     }
 
-    .loader{
+    /* Boot intro overlay (z-index: 9000, content remains SEO-visible behind it) */
+    .boot-intro{
       position:fixed;
       inset:0;
-      z-index:9999;
+      z-index:9000;
       display:grid;
       place-items:center;
-      background:#05060a;
-      transition:opacity .7s ease, visibility .7s ease;
+      padding:16px;
+      background:rgba(3, 5, 9, .96);
+      backdrop-filter: blur(6px);
+      transition: opacity .55s ease, visibility .55s ease;
+      overflow:hidden;
     }
 
-    .loader.hidden{
+    .boot-intro::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background: repeating-linear-gradient(
+        180deg,
+        rgba(255,255,255,.03),
+        rgba(255,255,255,.03) 1px,
+        transparent 1px,
+        transparent 4px
+      );
+      opacity:.28;
+      pointer-events:none;
+      animation: bootScan 2.3s linear infinite;
+    }
+
+    .boot-intro.exiting{
       opacity:0;
       visibility:hidden;
       pointer-events:none;
+      transform:scale(1.01);
+      filter: blur(2px);
     }
 
-    .loader-card{
-      width:min(420px,88vw);
-      padding:28px;
-      border:1px solid rgba(255,255,255,.13);
-      border-radius:28px;
-      background:linear-gradient(180deg,rgba(18,22,34,.9),rgba(9,11,18,.9));
-      box-shadow:0 30px 90px rgba(0,0,0,.48), inset 0 1px rgba(255,255,255,.08);
-      text-align:center;
+    .boot-card{
+      width:min(440px, 100%);
+      border-radius:20px;
+      border:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(180deg, rgba(13,17,25,.88), rgba(8,11,17,.92));
+      box-shadow:0 20px 54px rgba(0,0,0,.58), inset 0 1px 0 rgba(255,255,255,.08);
+      padding:18px;
       position:relative;
       overflow:hidden;
     }
 
-    .loader-card::before{
-      content:"";
-      position:absolute;
-      inset:-50%;
-      background:conic-gradient(
-        from 90deg,
-        transparent,
-        rgba(77,163,255,.25),
-        transparent,
-        rgba(255,157,77,.22),
-        transparent
-      );
-      animation:loaderSpin 2.2s linear infinite;
-    }
+    .boot-header{display:flex; align-items:center; gap:12px; margin-bottom:14px;}
+    .boot-logo{width:48px; height:48px; border-radius:13px; display:grid; place-items:center; border:1px solid rgba(255,255,255,.25); background:linear-gradient(135deg,#101824,#0b0f18); font:800 14px/1 var(--mono); letter-spacing:.08em;}
+    .boot-title{display:flex; flex-direction:column; min-width:0;}
+    .boot-title strong{font-size:17px;}
+    .boot-title span{font:600 12px/1.3 var(--mono); color:var(--muted); letter-spacing:.08em; text-transform:uppercase;}
+    .boot-dot{width:10px; height:10px; border-radius:50%; background:#d1d5db; margin-left:auto; box-shadow:0 0 0 0 rgba(209,213,219,.5); animation:bootPulse 1.2s ease infinite;}
 
-    .loader-inner{
-      position:relative;
-      z-index:1;
-      background:rgba(5,6,10,.82);
-      border-radius:22px;
-      padding:24px 20px;
-      border:1px solid rgba(255,255,255,.08);
-    }
+    .boot-lines{margin:0 0 12px; padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.10); background:rgba(4,7,12,.7); font:500 12px/1.4 var(--mono); color:#d8dee8; min-height:118px;}
+    .boot-line{display:block; opacity:.38;}
+    .boot-line.active{opacity:1;}
 
-    .loader-logo{
-      width:74px;
-      height:74px;
-      margin:0 auto 16px;
-      border-radius:24px;
-      display:grid;
-      place-items:center;
-      font:900 22px/1 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
-      letter-spacing:.05em;
-      background:linear-gradient(135deg,#4da3ff,#ff9d4d);
-      box-shadow:0 0 38px rgba(77,163,255,.36);
-      color:white;
-      animation:loaderPulse 1.6s ease-in-out infinite;
-    }
+    .boot-progress{height:8px; border-radius:999px; border:1px solid rgba(255,255,255,.16); background:rgba(255,255,255,.07); overflow:hidden;}
+    .boot-progress span{display:block; height:100%; width:0%; background:linear-gradient(90deg,#dbe0e7,#9ca3af); transition:width .33s ease;}
+    .boot-meta{display:flex; justify-content:space-between; margin-top:8px; font:600 11px/1.3 var(--mono); color:#8f9db5; text-transform:uppercase; letter-spacing:.07em;}
 
-    .loader h1{
-      margin:0;
-      font-size:15px;
-      letter-spacing:.18em;
-      text-transform:uppercase;
-    }
-
-    .loader p{
-      margin:8px 0 18px;
-      color:#a5afc0;
-      font:600 12px/1.5 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
-    }
-
-    .loadbar{
-      height:9px;
-      border-radius:999px;
-      background:rgba(255,255,255,.1);
-      overflow:hidden;
-      position:relative;
-    }
-
-    .loadbar span{
-      display:block;
-      width:46%;
-      height:100%;
-      border-radius:inherit;
-      background:linear-gradient(90deg,#4da3ff,#ff9d4d,#52df8f);
-      animation:loaderScan 1.3s ease-in-out infinite;
-    }
-
-    .loader small{
-      display:block;
-      margin-top:14px;
-      color:#707b91;
-      font:700 11px/1.4 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-    }
-
-    @keyframes loaderSpin{
-      to{transform:rotate(360deg)}
-    }
-
-    @keyframes loaderPulse{
-      0%,100%{
-        transform:scale(1);
-        filter:saturate(1);
-      }
-      50%{
-        transform:scale(1.04);
-        filter:saturate(1.35);
-      }
-    }
-
-    @keyframes loaderScan{
-      0%{transform:translateX(-115%)}
-      100%{transform:translateX(245%)}
-    }
-
+    @keyframes bootScan{from{transform:translateY(-8px)} to{transform:translateY(8px)}}
+    @keyframes bootPulse{0%{box-shadow:0 0 0 0 rgba(209,213,219,.45)}70%{box-shadow:0 0 0 9px rgba(209,213,219,0)}100%{box-shadow:0 0 0 0 rgba(209,213,219,0)}}
     @media (prefers-reduced-motion:reduce){
-      .loader,
-      .loader *,
-      .loader *::before,
-      .loader *::after{
+      .boot-intro,
+      .boot-intro *,
+      .boot-intro *::before,
+      .boot-intro *::after{
         animation-duration:.001ms!important;
         animation-iteration-count:1!important;
         transition-duration:.001ms!important;
@@ -727,15 +678,19 @@
   </style>
 </head>
 <body>
-  <div class="loader" id="loader" aria-hidden="true">
-    <div class="loader-card">
-      <div class="loader-inner">
-        <div class="loader-logo">TR</div>
-        <h1>DevSkits Link Deck</h1>
-        <p>routing contact buttons without consulting a committee</p>
-        <div class="loadbar"><span></span></div>
-        <small>tap anywhere to skip</small>
+  <div class="boot-intro" id="bootIntro" aria-hidden="true">
+    <div class="boot-card" role="presentation">
+      <div class="boot-header">
+        <div class="boot-logo">DS</div>
+        <div class="boot-title">
+          <strong>DevSkits</strong>
+          <span>Signal Boot</span>
+        </div>
+        <div class="boot-dot" aria-hidden="true"></div>
       </div>
+      <div class="boot-lines" id="bootLines"></div>
+      <div class="boot-progress"><span id="bootProgress"></span></div>
+      <div class="boot-meta"><span id="bootPercent">0%</span><span>tap to skip</span></div>
     </div>
   </div>
   <!-- Animated Background -->
@@ -1176,26 +1131,77 @@
 
     document.getElementById('year').textContent = new Date().getFullYear();
     
+    // Boot intro config: set true to play intro once per browser session.
+    const PLAY_ONCE_PER_SESSION = false;
+    // Boot lines/timing: edit the lines array or durationMs to customize sequence speed/content.
+    const BOOT_CONFIG = {
+      durationMs: 3800,
+      maxVisibleLines: 6,
+      lines: [
+        'loading devskits.link',
+        'mounting contact routes',
+        'checking socials',
+        'warming up loki beacon',
+        'syncing donation links',
+        'rendering landing page'
+      ]
+    };
 
+    const bootIntro = document.getElementById('bootIntro');
+    const bootLinesEl = document.getElementById('bootLines');
+    const bootProgressEl = document.getElementById('bootProgress');
+    const bootPercentEl = document.getElementById('bootPercent');
+    document.body.classList.add('boot-active');
 
-    const loader = document.getElementById('loader');
+    let bootDone = false;
+    let bootTimer = null;
+    let bootFailSafe = null;
 
-    function hideLoader(){
-      if (loader) loader.classList.add('hidden');
+    function completeBootIntro() {
+      if (bootDone) return;
+      bootDone = true;
+      clearInterval(bootTimer);
+      clearTimeout(bootFailSafe);
+      if (bootProgressEl) bootProgressEl.style.width = '100%';
+      if (bootPercentEl) bootPercentEl.textContent = '100%';
+      if (PLAY_ONCE_PER_SESSION) sessionStorage.setItem('devskitsBootSeen', '1');
+      if (bootIntro) bootIntro.classList.add('exiting');
+      document.body.classList.remove('boot-active');
+      document.body.classList.add('main-ready');
+      setTimeout(() => bootIntro && bootIntro.remove(), 650);
     }
 
-    window.addEventListener('load', () => {
-      setTimeout(hideLoader, 950);
-    });
+    function startBootIntro() {
+      if (!bootIntro || !bootLinesEl || !bootProgressEl || !bootPercentEl) return completeBootIntro();
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const alreadySeen = PLAY_ONCE_PER_SESSION && sessionStorage.getItem('devskitsBootSeen') === '1';
+      if (reduceMotion || alreadySeen) {
+        setTimeout(completeBootIntro, 120);
+        return;
+      }
+      const start = performance.now();
+      bootFailSafe = setTimeout(completeBootIntro, 5000);
+      bootIntro.addEventListener('click', completeBootIntro, { once: true });
+      bootTimer = setInterval(() => {
+        const elapsed = performance.now() - start;
+        const ratio = Math.min(elapsed / BOOT_CONFIG.durationMs, 1);
+        const percent = Math.round(ratio * 100);
+        bootProgressEl.style.width = percent + '%';
+        bootPercentEl.textContent = percent + '%';
 
-    if (loader) {
-      loader.addEventListener('click', hideLoader);
+        const lineCount = Math.min(BOOT_CONFIG.lines.length, Math.max(1, Math.ceil(ratio * BOOT_CONFIG.lines.length)));
+        const visible = BOOT_CONFIG.lines.slice(Math.max(0, lineCount - BOOT_CONFIG.maxVisibleLines), lineCount);
+        bootLinesEl.innerHTML = visible.map((line, index) => `<span class="boot-line ${index === visible.length - 1 ? 'active' : ''}">> ${line}</span>`).join('');
+
+        if (ratio >= 1) completeBootIntro();
+      }, 80);
     }
 
     // Initialize
     setHeroLogoImage();
     createParticles();
     setupButtonSounds();
+    window.addEventListener('load', startBootIntro);
   </script>
 </body>
 </html>
