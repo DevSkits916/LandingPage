@@ -949,6 +949,38 @@
   const introAvatar = document.getElementById('introAvatar');
   let introDone = false;
 
+  // ── Coin audio ─────────────────────────────────────────────────
+  let coinPlayed = false;
+  function playCoinAudio() {
+    if (coinPlayed) return;
+    coinPlayed = true;
+    try {
+      const audio = new Audio('data:audio/mpeg;base64,' + COIN_B64);
+      audio.volume = 0.8;
+      audio.play().catch(() => {});
+    } catch(e) {}
+  }
+
+  // Try immediately; if autoplay is blocked, fire on first interaction
+  (function() {
+    try {
+      const probe = new Audio('data:audio/mpeg;base64,' + COIN_B64);
+      probe.volume = 0.8;
+      const p = probe.play();
+      if (p !== undefined) {
+        p.then(() => { coinPlayed = true; }).catch(() => {
+          ['click','keydown','touchstart','scroll'].forEach(ev =>
+            document.addEventListener(ev, playCoinAudio, {once: true})
+          );
+        });
+      }
+    } catch(e) {
+      ['click','keydown','touchstart','scroll'].forEach(ev =>
+        document.addEventListener(ev, playCoinAudio, {once: true})
+      );
+    }
+  })();
+
   function finishIntro() {
     if (introDone) return;
     introDone = true;
@@ -956,19 +988,6 @@
     introEl.classList.add('gone');
     setTimeout(() => introEl.remove(), 800);
     mainEl.classList.add('on');
-    // Play embedded coin audio via Web Audio API
-    try {
-      initAc();
-      const raw = atob(COIN_B64);
-      const bytes = new Uint8Array(raw.length);
-      for (let i = 0; i < raw.length; i++) bytes[i] = raw.charCodeAt(i);
-      ac.decodeAudioData(bytes.buffer, function(decoded) {
-        const src = ac.createBufferSource();
-        src.buffer = decoded;
-        src.connect(ac.destination);
-        src.start(0);
-      });
-    } catch(e) {}
   }
 
   setTimeout(finishIntro, 3200);
